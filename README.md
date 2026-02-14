@@ -6,6 +6,6 @@ Ce dépôt contient des implémentations & heuristiques pour des problèmes de l
 
 ### Data
 
-Les fichiers de données sont nommés de la manières suivantes: 
+Les fichiers de données sont nommés de la manière suivante: 
 
 `{Nombre de clients}_{Nombre de sites}_{Côté de la grille}_{Seed}`
