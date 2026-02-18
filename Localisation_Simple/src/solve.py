@@ -1,6 +1,6 @@
 import numpy as np
-
-from src.utils import *
+import time
+from utils import *
 
 def heuristic2(instance):
 
@@ -18,6 +18,8 @@ def heuristic2(instance):
     w = np.zeros((n,m))
 
     ### PHASE 1
+
+    start = time.perf_counter()
 
     while np.any(affectation == -1):
         
@@ -91,6 +93,10 @@ def heuristic2(instance):
                     affectation[i] = j
                     break
 
+    end = time.perf_counter()
+
+    exec_time = end - start
+
     cost = sum(distance(coordinates_n[i], coordinates_m[int(affectation[i])]) for i in range(n)) + sum(f[j] * opened_warehouses[j] for j in range(m))
 
-    return affectation, opened_warehouses, int(cost)
+    return affectation, opened_warehouses, int(cost), exec_time

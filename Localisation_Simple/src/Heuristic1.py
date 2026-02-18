@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 from PLSR_Solveur import *
 from Dual_Solveur import *
 from utils import *
@@ -10,6 +10,8 @@ def heuristic1(C,F,X,Y,V,W,n,m):
 
     clusters = []
     c_sites = []
+
+    start = time.perf_counter()
 
     while sum(affected_points)!=len(affected_points):
         i_min = np.argmin(V_bis)
@@ -44,17 +46,22 @@ def heuristic1(C,F,X,Y,V,W,n,m):
     for k in c_sites:
         Y_h[k] = 1
 
+    end = time.perf_counter()
+
+    exec_time = end - start
+
     cost = np.sum(C * X_h) + np.sum(F * Y_h)
 
-    return X_h, Y_h, cost
+    return X_h, Y_h, cost, exec_time
 
-path = "../data/LS_100_10_1000_1.json"
+path = "../data/LS_10_10_1000_1.json"
 
-X, Y, cost = plsr_solveur(path)
-W, V, cost = dual_solveur(path)
-n, m, C, F = load_instance_numpy(path)
+distance = 1
+X, Y, cost, exec_time = plsr_solveur(path,distance)
+W, V, cost, exec_time = dual_solveur(path,distance)
+n, m, C, F = load_instance_numpy(path,distance)
 
-X, Y, cost = heuristic1(C,F,X,Y,V,W,n,m)
+X, Y, cost, exec_time = heuristic1(C,F,X,Y,V,W,n,m)
 print(X, Y, cost)
 
 

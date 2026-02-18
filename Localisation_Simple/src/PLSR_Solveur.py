@@ -1,11 +1,12 @@
 import json
+import time
 import numpy as np
 from pathlib import Path
 import pulp as pl
 from utils import *
 
-def plsr_solveur(path):
-    n, m, C, F = load_instance_numpy(path)
+def plsr_solveur(path,distance):
+    n, m, C, F = load_instance_numpy(path,distance)
     print(C)
 
     I = [i for i in range(n)]
@@ -37,7 +38,12 @@ def plsr_solveur(path):
     print("\nSOLVEUR\n")
     path_to_cplex = "C:\Program Files\IBM\ILOG\CPLEX_Studio2211\cplex\\bin\\x64_win64\cplex.exe"
     solver = pl.CPLEX_CMD(path=path_to_cplex, msg=True)
+    
+    start = time.perf_counter()
     status = prob.solve(solver)
+    end = time.perf_counter()
+
+    exec_time = end - start
 
     print("Status : ", pl.LpStatus[status])
 
@@ -61,5 +67,5 @@ def plsr_solveur(path):
 
     cost = pl.value(prob.objective)
 
-    return X, Y, int(cost)
+    return X, Y, int(cost), exec_time
 
