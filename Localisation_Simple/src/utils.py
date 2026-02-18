@@ -71,7 +71,7 @@ def distance(p1, p2, metric="manhattan"):
 
     return abs(p1[0] - p2[0]) + abs(p1[1] - p1[1])
 
-def load_instance_numpy(json_path):
+def load_instance_numpy(json_path, distance=2):
     json_path = Path(json_path)
 
     with json_path.open("r", encoding="utf-8") as f:
@@ -87,6 +87,10 @@ def load_instance_numpy(json_path):
     F = np.array(data["f"], dtype=float)
 
     diff = coords_n[:, None, :] - coords_m[None, :, :]
-    C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
+    
+    if distance == 1:
+        C = np.abs(diff).sum(axis=2)      # norme 1 manhattan 
+    else:
+        C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
 
     return n, m, C, F
