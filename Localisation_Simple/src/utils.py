@@ -1,6 +1,7 @@
 import numpy as np
 import random
 import json
+from pathlib import Path
 
 def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1):
     random.seed(seed)
@@ -69,3 +70,23 @@ def gen_and_save_multiple_instances(N, M, L=1000, cost_range=range(10, 51), seed
 def distance(p1, p2, metric="manhattan"):
 
     return abs(p1[0] - p2[0]) + abs(p1[1] - p1[1])
+
+def load_instance_numpy(json_path):
+    json_path = Path(json_path)
+
+    with json_path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    # Data
+    n = int(data["n"])
+    m = int(data["m"])
+
+    coords_n = np.array(data["coordinates_n"], dtype=float)  # shape (n, 2)
+    coords_m = np.array(data["coordinates_m"], dtype=float)  # shape (m, 2)
+
+    F = np.array(data["f"], dtype=float)
+
+    diff = coords_n[:, None, :] - coords_m[None, :, :]
+    C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
+
+    return n, m, C, F
