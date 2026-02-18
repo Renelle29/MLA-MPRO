@@ -3,27 +3,37 @@ import random
 import json
 from pathlib import Path
 
-def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1):
+def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1, fractional=False):
+    
     random.seed(seed)
     np.random.seed(seed)
 
-    total_points = (L + 1) ** 2
-    assert n + m <= total_points, "Grid too small"
+    if fractional: # Continuous coordinates
+        
+        coordinates_n = np.random.uniform(0, L, size=(n, 2))
+        coordinates_m = np.random.uniform(0, L, size=(m, 2))
+        
+        f = np.random.uniform(cost_range[0], cost_range[1], size=m)
+    
+    else: # Integer coordinates
+        
+        total_points = (L + 1) ** 2
+        assert n + m <= total_points, "Grid too small"
 
-    # Generate full lattice
-    grid = [(x, y) for x in range(L + 1) for y in range(L + 1)]
+        # Generate full lattice
+        grid = [(x, y) for x in range(L + 1) for y in range(L + 1)]
 
-    # Sample without replacement
-    selected = random.sample(grid, n + m)
+        # Sample without replacement
+        selected = random.sample(grid, n + m)
 
-    # Split
-    coordinates_n = np.array(selected[:n], dtype=int)
-    coordinates_m = np.array(selected[n:n + m], dtype=int)
+        # Split
+        coordinates_n = np.array(selected[:n], dtype=int)
+        coordinates_m = np.array(selected[n:n + m], dtype=int)
 
-    # Facility opening costs
-    f = np.random.choice(list(cost_range), size=m)
+        # Facility opening costs
+        f = np.random.choice(list(cost_range), size=m)
 
-    return coordinates_n, coordinates_m, f, L, seed
+    return coordinates_n, coordinates_m, f, L, seed, fractional
 
 import json
 
