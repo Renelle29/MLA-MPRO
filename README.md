@@ -22,3 +22,11 @@ Cela retourne un dictionnaire contenant les clés suivantes:
 - `meta`: Meta-données - Côté le la grille `L` - Seed `seed`
 
 La fonction `distance` renvoie la distance de Manhattan (norme 1) entre deux points de la grille (donnés sous forme de liste).
+
+Les instances sont séparées en trois fichiers:
+
+- `data/fractional_l2_frac_solution` - Instances pour lesquelles les coordonées des points sont fractionnaires, la distance utilisé est la norme euclidienne, la solution optimale retournée par CPLEX de PLSR est fractionnaire.
+
+- `data/integer_l1_frac_solution` - Instances pour lesquelles les coordonées des points sont entières, la distance utilisé est la norme manhattan (norme 1), la solution optimale retournée par CPLEX de PLSR est fractionnaire.
+
+- `data/integer_l1_int_solution` - Instances pour lesquelles les coordonées des points sont entières, la distance utilisé est la norme manhattan (norme 1), la solution optimale retournée par CPLEX de PLSR est entière.

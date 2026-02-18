@@ -63,7 +63,3 @@ def pls_solveur(path):
     cost = pl.value(prob.objective)
 
     return X, Y, int(cost)
-
-path = "../data/LS_Special.json"
-X, Y, cost = pls_solveur(path)
-print(X,Y,cost)

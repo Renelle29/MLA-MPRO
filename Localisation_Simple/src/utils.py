@@ -3,35 +3,48 @@ import random
 import json
 from pathlib import Path
 
-def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1):
+def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1, fractional=False):
+    
     random.seed(seed)
     np.random.seed(seed)
 
-    total_points = (L + 1) ** 2
-    assert n + m <= total_points, "Grid too small"
+    if fractional: # Continuous coordinates
+        
+        coordinates_n = np.random.uniform(0, L, size=(n, 2))
+        coordinates_m = np.random.uniform(0, L, size=(m, 2))
+        
+        f = np.random.uniform(cost_range[0], cost_range[-1], size=m)
+    
+    else: # Integer coordinates
+        
+        total_points = (L + 1) ** 2
+        assert n + m <= total_points, "Grid too small"
 
-    # Generate full lattice
-    grid = [(x, y) for x in range(L + 1) for y in range(L + 1)]
+        # Generate full lattice
+        grid = [(x, y) for x in range(L + 1) for y in range(L + 1)]
 
-    # Sample without replacement
-    selected = random.sample(grid, n + m)
+        # Sample without replacement
+        selected = random.sample(grid, n + m)
 
-    # Split
-    coordinates_n = np.array(selected[:n], dtype=int)
-    coordinates_m = np.array(selected[n:n + m], dtype=int)
+        # Split
+        coordinates_n = np.array(selected[:n], dtype=int)
+        coordinates_m = np.array(selected[n:n + m], dtype=int)
 
-    # Facility opening costs
-    f = np.random.choice(list(cost_range), size=m)
+        # Facility opening costs
+        f = np.random.choice(list(cost_range), size=m)
 
-    return coordinates_n, coordinates_m, f, L, seed
+    return coordinates_n, coordinates_m, f, L, seed, fractional
 
 import json
 
-def save_instance_json(coordinates_n, coordinates_m, f, L=None, seed=None):
+def save_instance_json(coordinates_n, coordinates_m, f, L=None, seed=None, fractional=False):
     
     n = int(len(coordinates_n))
     m = int(len(coordinates_m))
-    filename = f"data/LS_{n}_{m}_{L}_{seed}.json"
+    if fractional:
+        filename = f"../data/fractional/LS_{n}_{m}_{L}_{seed}.json"
+    else:
+        filename = f"../data/integer/LS_{n}_{m}_{L}_{seed}.json"
 
     data = {
         "n": n,
@@ -71,7 +84,7 @@ def distance(p1, p2, metric="manhattan"):
 
     return abs(p1[0] - p2[0]) + abs(p1[1] - p1[1])
 
-def load_instance_numpy(json_path):
+def load_instance_numpy(json_path, distance=1):
     json_path = Path(json_path)
 
     with json_path.open("r", encoding="utf-8") as f:
@@ -87,6 +100,10 @@ def load_instance_numpy(json_path):
     F = np.array(data["f"], dtype=float)
 
     diff = coords_n[:, None, :] - coords_m[None, :, :]
-    C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
+    
+    if distance == 1:
+        C = np.abs(diff).sum(axis=2)      # norme 1 manhattan 
+    else:
+        C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
 
     return n, m, C, F

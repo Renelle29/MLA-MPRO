@@ -6,6 +6,7 @@ from utils import *
 
 def plsr_solveur(path):
     n, m, C, F = load_instance_numpy(path)
+    print(C)
 
     I = [i for i in range(n)]
     J = [j for j in range(m)]
@@ -61,8 +62,4 @@ def plsr_solveur(path):
     cost = pl.value(prob.objective)
 
     return X, Y, int(cost)
-
-path = "../data/LS_10_10_1000_1.json"
-X, Y, cost = plsr_solveur(path)
-print(X,Y,cost)
 
