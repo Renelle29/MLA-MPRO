@@ -13,7 +13,7 @@ def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1, fractional=Fa
         coordinates_n = np.random.uniform(0, L, size=(n, 2))
         coordinates_m = np.random.uniform(0, L, size=(m, 2))
         
-        f = np.random.uniform(cost_range[0], cost_range[1], size=m)
+        f = np.random.uniform(cost_range[0], cost_range[-1], size=m)
     
     else: # Integer coordinates
         
@@ -37,11 +37,14 @@ def generate_points(n, m, L=100, cost_range=range(10, 51), seed=1, fractional=Fa
 
 import json
 
-def save_instance_json(coordinates_n, coordinates_m, f, L=None, seed=None):
+def save_instance_json(coordinates_n, coordinates_m, f, L=None, seed=None, fractional=False):
     
     n = int(len(coordinates_n))
     m = int(len(coordinates_m))
-    filename = f"data/LS_{n}_{m}_{L}_{seed}.json"
+    if fractional:
+        filename = f"../data/fractional/LS_{n}_{m}_{L}_{seed}.json"
+    else:
+        filename = f"../data/integer/LS_{n}_{m}_{L}_{seed}.json"
 
     data = {
         "n": n,
@@ -81,7 +84,7 @@ def distance(p1, p2, metric="manhattan"):
 
     return abs(p1[0] - p2[0]) + abs(p1[1] - p1[1])
 
-def load_instance_numpy(json_path, distance=2):
+def load_instance_numpy(json_path, distance=1):
     json_path = Path(json_path)
 
     with json_path.open("r", encoding="utf-8") as f:
