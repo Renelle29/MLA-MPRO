@@ -82,7 +82,7 @@ def gen_and_save_multiple_instances(N, M, L=1000, cost_range=range(10, 51), seed
 
 def distance(p1, p2, metric="manhattan"):
 
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p1[1])
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 def load_instance_numpy(json_path, distance=1):
     json_path = Path(json_path)
@@ -100,10 +100,12 @@ def load_instance_numpy(json_path, distance=1):
     F = np.array(data["f"], dtype=float)
 
     diff = coords_n[:, None, :] - coords_m[None, :, :]
+    print(np.abs(diff).sum(axis=2)[0,0])
     
     if distance == 1:
         C = np.abs(diff).sum(axis=2)      # norme 1 manhattan 
     else:
         C = np.linalg.norm(diff, axis=2)  # norme euclidienne → (n, m)
+    print(C[0,0])
 
     return n, m, C, F

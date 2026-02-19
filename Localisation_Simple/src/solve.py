@@ -44,7 +44,7 @@ def heuristic2(instance):
             # Event 3
             already_paid = sum(w[i,j] for i in range(n))
             
-            if opened_warehouses[j] == 0 and already_paid == f[j]:
+            if opened_warehouses[j] == 0 and already_paid >= f[j]:
                 opened_warehouses[j] = 1
 
                 for i in range(n):
