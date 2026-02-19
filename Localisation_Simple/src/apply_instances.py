@@ -1,7 +1,7 @@
-from PLS_Solveur import *
-from PLSR_Solveur import *
-from Dual_Solveur import *
-from Heuristic1 import *
+#from PLS_Solveur import *
+#from PLSR_Solveur import *
+#from Dual_Solveur import *
+#from Heuristic1 import *
 from solve import *
 from utils import *
 import concurrent.futures
@@ -39,7 +39,7 @@ for folder in folders:
         #print(file)
 
         # PLS
-        X, Y, cost, exec_time = pls_solveur(file,distance)
+        """X, Y, cost, exec_time = pls_solveur(file,distance)
 
         with open(path_to_json, "r", encoding="utf-8") as f:
             dico = json.load(f)
@@ -53,10 +53,10 @@ for folder in folders:
             dico["PLS"][file.parent.name][file.name].setdefault("time", exec_time)
 
         with open(path_to_json, "w", encoding="utf-8") as f:
-            json.dump(dico, f, indent=4)
+            json.dump(dico, f, indent=4)"""
 
         # PLSR
-        X, Y, cost, exec_time = plsr_solveur(file,distance)
+        """X, Y, cost, exec_time = plsr_solveur(file,distance)
 
         with open(path_to_json, "r", encoding="utf-8") as f:
             dico = json.load(f)
@@ -67,11 +67,11 @@ for folder in folders:
             dico["PLSR"][file.parent.name][file.name].setdefault("time", exec_time)
 
         with open(path_to_json, "w", encoding="utf-8") as f:
-            json.dump(dico, f, indent=4)
+            json.dump(dico, f, indent=4)"""
 
         # Heuristic1
 
-        W, V, cost, exec_time = dual_solveur(file, distance)
+        """W, V, cost, exec_time = dual_solveur(file, distance)
         n, m, C, F = load_instance_numpy(file, distance)
         X, Y, cost, exec_time = heuristic1(C, F, X, Y, V, W, n, m)
 
@@ -84,10 +84,10 @@ for folder in folders:
             dico["Heuristic1"][file.parent.name][file.name].setdefault("time", exec_time)
 
         with open(path_to_json, "w", encoding="utf-8") as f:
-            json.dump(dico, f, indent=4)
+            json.dump(dico, f, indent=4)"""
 
         # Heuristic2
-        """
+        
         instance = load_instance_json(file)
         affectation, opened_warehouses, cost, exec_time = heuristic2(instance)
 
@@ -101,5 +101,5 @@ for folder in folders:
 
         with open(path_to_json, "w", encoding="utf-8") as f:
             json.dump(dico, f, indent=4)
-        """
+        
 

@@ -68,8 +68,9 @@ def pls_solveur(path,distance):
 
     return X, Y, int(cost), exec_time
 
-path = "../data/LS_10_10_1000_1.json"
+"""path = "../data/LS_10_10_1000_1.json"
 
 distance = 1
 X, Y, cost, exec_time = pls_solveur(path,distance)
 print(X, Y, cost)
+"""
